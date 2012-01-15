@@ -33,3 +33,24 @@
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+
+
+
+
+"===================================================================================================
+" NOTE: on WINDOWS systems
+" 1. create a file named '_vimrc' under the user home directory
+"    (example: on my Windows 7 system is under C:\Users\alfonso.cuffaro)
+"    the created file will be C:\Users\alfonso.cuffaro\_vimrc 
+" 2. copy the following rows in the above mentioned file
+"
+"         fun! MySys()
+"            return "windows"
+"         endfun
+Visual mode related
+"
+"         set runtimepath=/Users/alfonso.cuffaro/vim_local,$VIMRUNTIME
+"         source /Users/alfonso.cuffaro/vim_local/vimrc
+"
+"===================================================================================================
+
