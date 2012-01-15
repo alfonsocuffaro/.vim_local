@@ -58,6 +58,14 @@ Visual mode related
 
 
 
+
+" this must be first, because it changes other options as a side effect.
+" use vim settings, rather then vi settings (much better!)
+set nocompatible
+
+
+
+
 "===================================================================================================
 " GENERAL
 "===================================================================================================
