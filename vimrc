@@ -187,3 +187,24 @@ set showmode                    " always show what mode we're currently editing 
 "		set columns=100
 "	endif
 "endif
+
+
+
+
+
+
+"===================================================================================================
+" FILES: types, backup, etc...
+"===================================================================================================
+set encoding=utf8
+
+
+
+
+
+
+set fileformats=unix,dos,mac        " default file types
+
+
+
+
