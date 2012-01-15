@@ -5,7 +5,6 @@
 " Contributions from:
 " Setting sections:    - General
 "                      - Syntax Highlight, Colors, Fonts...
-"                      - VIM user interface
 "                      - File content settings
 "                      - Files, backups and undo
 "                      - Text, tab and indent related
@@ -26,6 +25,7 @@
 "                      - JavaScript section
 "                      - Include other files
 "                      - MISC
+"                      - Visual mode related
 "
 " Plugins:
 "
@@ -47,7 +47,6 @@
 "         fun! MySys()
 "            return "windows"
 "         endfun
-Visual mode related
 "
 "         set runtimepath=/Users/alfonso.cuffaro/vim_local,$VIMRUNTIME
 "         source /Users/alfonso.cuffaro/vim_local/vimrc
@@ -64,9 +63,13 @@ Visual mode related
 set nocompatible
 
 filetype off                                                         " force reloading *after* pathogen loaded
+"call pathogen#helptags()
 call pathogen#infect()
 filetype on
 
+"
+filetype plugin on
+filetype indent on
 
 
 "===================================================================================================
@@ -105,7 +108,6 @@ endtry
 "===================================================================================================
 " USER INTERFACE: Syntax Highlight, Colors, Fonts
 "===================================================================================================
-
 " actual font depends on system
 
 if MySys() == "mac"
@@ -126,7 +128,9 @@ set cursorline      " make current cursor line visible
 
 if has("gui_running")
 	set background=dark
-	colorscheme peaksea
+	"colorscheme peaksea
+	colorscheme solarized
+
 else
 	set background=dark
 	colorscheme zellner
@@ -200,12 +204,6 @@ set showmode                    " always show what mode we're currently editing 
 " FILES: types, backup, etc...
 "===================================================================================================
 set encoding=utf8
-
-
-
-
-
-
 set fileformats=unix,dos,mac        " default file types
 
 
