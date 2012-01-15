@@ -105,3 +105,13 @@ endif
 
 syntax enable       " enable syntax highlighting
 set cursorline      " make current cursor line visible
+
+if has("gui_running")
+  set t_Co=256         " number of colors
+  set background=dark
+  colorscheme peaksea
+else
+  set background=dark
+  colorscheme zellner
+endif
+
