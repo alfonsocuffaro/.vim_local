@@ -70,19 +70,24 @@
 " use vim settings, rather then vi settings (much better!)
 set nocompatible
 
+
+" manage all others plugins using pathogen plugin (from Tim Pope)
+" (http://www.vim.org/scripts/script.php?script_id=2332)
 filetype off                                                         " force reloading *after* pathogen loaded
-"call pathogen#helptags()
 call pathogen#infect()
+call pathogen#helptags()
 filetype on
 
-"
-filetype plugin on
-filetype indent on
 
 
 "===================================================================================================
 " GENERAL
 "===================================================================================================
+
+" restore filetype management ;-)
+filetype plugin on
+filetype indent on
+
 
 " use a common path separator across all platforms.
 " shellslash convert all backslashes to forward slashes on expanding filenames.
