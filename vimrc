@@ -63,6 +63,10 @@ Visual mode related
 " use vim settings, rather then vi settings (much better!)
 set nocompatible
 
+filetype off                                                         " force reloading *after* pathogen loaded
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles('$HOME/vim_local/bundle')
+filetype on
 
 
 
