@@ -78,3 +78,30 @@ let mapleader = ","         " set leader in this file
 let g:mapleader = ","       " set leader globally
 
 
+
+
+
+
+
+
+
+"===================================================================================================
+" USER INTERFACE: Syntax Highlight, Colors, Fonts
+"===================================================================================================
+
+" actual font depends on system
+
+if MySys() == "mac"
+  set gfn=Menlo:h14
+  set shell=/bin/bash
+elseif MySys() == "windows"
+  set gfn=Consolas:h10:cDEFAULT
+  "set shell=/bin/bash
+elseif MySys() == "linux"
+  set gfn=Monospace\ 10
+  set shell=/bin/bash
+endif
+
+
+syntax enable       " enable syntax highlighting
+set cursorline      " make current cursor line visible
