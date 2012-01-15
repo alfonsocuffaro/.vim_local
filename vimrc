@@ -64,8 +64,7 @@ Visual mode related
 set nocompatible
 
 filetype off                                                         " force reloading *after* pathogen loaded
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles('$HOME/vim_local/bundle')
+call pathogen#infect()
 filetype on
 
 
