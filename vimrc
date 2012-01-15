@@ -54,3 +54,27 @@ Visual mode related
 "
 "===================================================================================================
 
+
+
+
+
+"===================================================================================================
+" GENERAL
+"===================================================================================================
+
+" use a common path separator across all platforms.
+" shellslash convert all backslashes to forward slashes on expanding filenames.
+" it enables consistancy between Windows and Linux platforms.
+" BE CAREFUL! Windows file operations require backslashes -- 
+" any paths determined manually (not by Vim) need to be reversed.
+set shellslash
+
+
+set history=100     " how many history lines to remember
+
+
+" with a map leader it's possible to do extra key combinations
+let mapleader = ","         " set leader in this file
+let g:mapleader = ","       " set leader globally
+
+
