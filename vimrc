@@ -146,7 +146,7 @@ endif
 
 
 if has("gui_running")
-	set t_Co=256         " number of colors
+	"set t_Co=256         " number of colors
 endif
 
 
