@@ -141,5 +141,49 @@ endif
 
 
 
+"===================================================================================================
+" USER INTERFACE: application window
+"===================================================================================================
+
+
+" include toolbar? no, remove
+if has("gui_running")
+	set guioptions-=T
 endif
 
+" set windows height and width, BUT only entering the application for the first time
+" if user has yet redimensioned the window to fit his needs, don't reset it (do nothing)
+autocmd guienter * : set lines=30 columns=145
+
+
+set number   " I like having line numbers
+
+" I don't like line numbers shown when file/buffer is new
+"autocmd bufnewfile   * : set nonumber
+"autocmd bufnew       * : set nonumber
+"autocmd bufwritepost * : (line('$') == 1 && getline(1) == ''? set nonumber : set nonumber)
+"autocmd guienter     * : set nonumber
+
+	
+set cmdheight=1                " the commandbar height
+set ruler                      " always show current position
+
+set showmode                    " always show what mode we're currently editing in
+
+
+
+
+
+"if has("gui_running")
+"	" GUI is running or is about to start.
+"	" Maximize gvim window.
+"else
+"	" This is console Vim.
+"	if exists("+lines")
+"		set lines=50
+"	endif
+"	
+"	if exists("+columns")
+"		set columns=100
+"	endif
+"endif
