@@ -3,7 +3,15 @@
 "
 " File version:        0.1 - 15/Jan/2012
 " Contributions from:
-" Setting sections:    - General
+" Setting sections:    - GENERAL
+"                      - USER INTERFACE: Syntax Highlight, Colors, Fonts
+"                      - USER INTERFACE: application window
+"                      - FILES: types, backup, etc
+
+
+
+
+
 "                      - Syntax Highlight, Colors, Fonts...
 "                      - File content settings
 "                      - Files, backups and undo
