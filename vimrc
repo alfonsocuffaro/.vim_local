@@ -86,6 +86,12 @@ let mapleader = ","         " set leader in this file
 let g:mapleader = ","       " set leader globally
 
 
+" try to set the system locale 
+try
+    lang en_US
+catch
+endtry
+
 
 
 
