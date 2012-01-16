@@ -6,6 +6,7 @@
 " Setting sections:    - GENERAL
 "                      - USER INTERFACE: Syntax Highlight, Colors, Fonts
 "                      - USER INTERFACE: application window
+"                      - USER INTERFACE: tabbing
 "                      - FILES: types, backup, etc
 
 
@@ -73,7 +74,7 @@ set nocompatible
 
 " manage all others plugins using pathogen plugin (from Tim Pope)
 " (http://www.vim.org/scripts/script.php?script_id=2332)
-filetype off                                                         " force reloading *after* pathogen loaded
+filetype off                       " force reloading *after* pathogen loaded
 call pathogen#infect()
 call pathogen#helptags()
 filetype on
@@ -121,8 +122,8 @@ endtry
 "===================================================================================================
 " USER INTERFACE: Syntax Highlight, Colors, Fonts
 "===================================================================================================
-" actual font depends on system
 
+" actual font depends on system
 if MySys() == "mac"
   set gfn=Menlo:h14
   set shell=/bin/bash
@@ -135,7 +136,8 @@ elseif MySys() == "linux"
 endif
 
 
-syntax enable       " enable syntax highlighting
+syntax enable       " enable syntax highlighting (keep your current color settings)
+"syntax on          " enable syntax highlighting (Vim overrules your settings with the defaults)
 set cursorline      " make current cursor line visible
 
 
@@ -165,7 +167,6 @@ endif
 " USER INTERFACE: application window
 "===================================================================================================
 
-
 " include toolbar? no, remove
 if has("gui_running")
 	set guioptions-=T
@@ -185,11 +186,11 @@ set number   " I like having line numbers
 "autocmd guienter     * : set nonumber
 
 	
-set cmdheight=1                " the commandbar height
-set ruler                      " always show current position
-
-set showmode                    " always show what mode we're currently editing in
-
+set cmdheight=1     " the commandbar height
+set ruler           " always show current position
+set showmode        " always show what mode we're currently editing in
+set lazyredraw      " don't update the display while executing macros
+set showmode        " show me the mode I'm in
 
 
 
@@ -210,7 +211,10 @@ set showmode                    " always show what mode we're currently editing 
 
 
 
-
+"===================================================================================================
+" USER INTERFACE: tabbing
+"===================================================================================================
+set hidden      " it’s OK to have an unwritten buffer 
 
 
 "===================================================================================================
