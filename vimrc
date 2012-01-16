@@ -191,6 +191,7 @@ set ruler           " always show current position
 set showmode        " always show what mode we're currently editing in
 set lazyredraw      " don't update the display while executing macros
 set showmode        " show me the mode I'm in
+set wildmenu        " enable enhanced command-line completion
 
 
 
