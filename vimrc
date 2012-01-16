@@ -8,6 +8,7 @@
 "                      - USER INTERFACE: application window
 "                      - USER INTERFACE: tabbing
 "                      - FILES: types, backup, etc
+"                      - SEARCHING
 
 
 
@@ -50,7 +51,7 @@
 " NOTE: on WINDOWS systems
 " 1. create a file named '_vimrc' under the user home directory
 "    (example: on my Windows 7 system is under C:\Users\alfonso.cuffaro)
-"    the created file will be C:\Users\alfonso.cuffaro\_vimrc 
+"    the created file will be C:\Users\alfonso.cuffaro\_vimrc
 " 2. copy the following rows in the above mentioned file
 "
 "         fun! MySys()
@@ -93,7 +94,7 @@ filetype indent on
 " use a common path separator across all platforms.
 " shellslash convert all backslashes to forward slashes on expanding filenames.
 " it enables consistancy between Windows and Linux platforms.
-" BE CAREFUL! Windows file operations require backslashes -- 
+" BE CAREFUL! Windows file operations require backslashes --
 " any paths determined manually (not by Vim) need to be reversed.
 set shellslash
 
@@ -106,7 +107,7 @@ let mapleader = ","         " set leader in this file
 let g:mapleader = ","       " set leader globally
 
 
-" try to set the system locale 
+" try to set the system locale
 try
     lang en_US
 catch
@@ -185,10 +186,9 @@ set number   " I like having line numbers
 "autocmd bufwritepost * : (line('$') == 1 && getline(1) == ''? set nonumber : set nonumber)
 "autocmd guienter     * : set nonumber
 
-	
+
 set cmdheight=1     " the commandbar height
 set ruler           " always show current position
-set showmode        " always show what mode we're currently editing in
 set lazyredraw      " don't update the display while executing macros
 set showmode        " show me the mode I'm in
 set wildmenu        " enable enhanced command-line completion
@@ -204,7 +204,7 @@ set wildmenu        " enable enhanced command-line completion
 "	if exists("+lines")
 "		set lines=50
 "	endif
-"	
+"
 "	if exists("+columns")
 "		set columns=100
 "	endif
@@ -215,7 +215,7 @@ set wildmenu        " enable enhanced command-line completion
 "===================================================================================================
 " USER INTERFACE: tabbing
 "===================================================================================================
-set hidden      " it’s OK to have an unwritten buffer 
+set hidden      " it’s OK to have an unwritten buffer
 
 
 "===================================================================================================
@@ -227,3 +227,15 @@ set fileformats=unix,dos,mac        " default file types
 
 
 
+
+
+
+"===================================================================================================
+" SEARCHING
+"===================================================================================================
+
+
+set incsearch  " I like incremental search
+set ignorecase " ignore case when searching
+set smartcase  " override ignorecas option if the search pattern contains upper case chars
+set hlsearch   " highlight search things
