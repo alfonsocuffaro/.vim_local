@@ -168,7 +168,7 @@ endif
 " USER INTERFACE: application window
 "===================================================================================================
 
-" include toolbar? no, remove
+" include toolbar? no, remove it
 if has("gui_running")
 	set guioptions-=T
 endif
@@ -193,6 +193,8 @@ set lazyredraw      " don't update the display while executing macros
 set showmode        " show me the mode I'm in
 set wildmenu        " enable enhanced command-line completion
 
+set noerrorbells    " no sound on errors
+set visualbell      " on errors blink the window
 
 
 
@@ -224,8 +226,23 @@ set hidden      " it’s OK to have an unwritten buffer
 set encoding=utf8
 set fileformats=unix,dos,mac        " default file types
 
+set nobackup           " turn backup off
+set noautoread         " ask me to reload a file if it has been modified from an external application
+set writebackup        " make a backup before overwriting a file (backup is removed on successful writing)
+set noswapfile
+set browsedir=buffer   " file browser uses buffer dir to start
 
+" persistent undo
+try
+    if MySys() == "windows"
+      set undodir=/Temp
+    else
+      set undodir=~/.vim_runtime/undodir
+    endif
 
+    "set undofile
+catch
+endtry
 
 
 
