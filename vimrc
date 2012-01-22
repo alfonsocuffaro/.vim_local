@@ -105,8 +105,8 @@ set history=100     " how many history lines to remember
 
 
 " with a map leader it's possible to do extra key combinations
-let mapleader = ","         " set leader in this file
-let g:mapleader = ","       " set leader globally
+"let mapleader = ","         " set leader in this file
+"let g:mapleader = ","       " set leader globally
 
 
 " try to set the system locale
@@ -198,7 +198,8 @@ set wildmenu        " enable enhanced command-line completion
 set noerrorbells    " no sound on errors
 set visualbell      " on errors blink the window
 
-
+set foldmethod=indent
+set foldlevel=99
 
 "if has("gui_running")
 "	" GUI is running or is about to start.
@@ -250,7 +251,7 @@ endtry
 
 
 "===================================================================================================
-" SEARCHING
+" EDITING
 "===================================================================================================
 set backspace=eol,start,indent " set how backspace (i.e. <BS>, <Del>,...) works in insert mode
 set autoindent                 " auto indent (local to buffer)
@@ -290,3 +291,16 @@ set incsearch  " I like incremental search
 set ignorecase " ignore case when searching
 set smartcase  " search is case sensitive (override ignorecase option) if the search pattern contains an upper case char
 set hlsearch   " highlight search things
+
+
+
+"===================================================================================================
+" KEYBORD MAPPINGS
+"===================================================================================================
+map <leader>e :e! ~/vim_local/vimrc<cr>               " fast editing of the vim conf file
+autocmd! bufwritepost vimrc source ~/vim_local/vimrc  " when vim conf file is edited, reload it
+
+
+
+
+
