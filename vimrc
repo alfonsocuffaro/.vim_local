@@ -8,18 +8,15 @@
 "                      - USER INTERFACE: application window
 "                      - USER INTERFACE: tabbing
 "                      - FILES: types, backup, etc
+"                      - EDITING
 "                      - SEARCHING
-
-
-
-
+"                      - KEYBORD MAPPINGS
 
 "                      - Syntax Highlight, Colors, Fonts...
 "                      - File content settings
 "                      - Files, backups and undo
 "                      - Text, tab and indent related
 "                      - Editing settings
-"                      - KEYBORD MAPPINGS
 "                      - Moving around, tabs and buffers
 "                      - Command mode related
 "                      - Statusline
@@ -79,6 +76,11 @@ filetype off                       " force reloading *after* pathogen loaded
 call pathogen#infect()
 call pathogen#helptags()
 filetype on
+
+
+
+
+
 
 
 
@@ -250,9 +252,41 @@ endtry
 "===================================================================================================
 " SEARCHING
 "===================================================================================================
+set backspace=eol,start,indent " set how backspace (i.e. <BS>, <Del>,...) works in insert mode
+set autoindent                 " auto indent (local to buffer)
+set smartindent                " smart indent
 
+" remap VIM 0
+"map 0 ^ 	               " don't remap, I like the usual way of working
+
+" use spaces instead of tabs: NO, I like tabs
+set noexpandtab
+
+" the width of TAB char (when met into file)
+set tabstop=4
+
+" number of spaces that a <Tab> counts for while performing editing operations
+" (like inserting a <Tab> or using <BS>)
+" when hitting <BS>, pretend like a tab is removed, even if spaces are used
+set softtabstop=4
+
+" number of spaces to use for each step of (auto)indent
+set shiftwidth=4
+
+
+set smarttab
+
+
+
+
+
+
+"===================================================================================================
+" SEARCHING
+"===================================================================================================
+set magic                      " set magic on, for regular expressions
 
 set incsearch  " I like incremental search
 set ignorecase " ignore case when searching
-set smartcase  " override ignorecas option if the search pattern contains upper case chars
+set smartcase  " search is case sensitive (override ignorecase option) if the search pattern contains an upper case char
 set hlsearch   " highlight search things
