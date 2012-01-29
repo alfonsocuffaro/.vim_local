@@ -10,6 +10,7 @@
 "                      - FILES: types, backup, etc
 "                      - EDITING
 "                      - SEARCHING
+"                      - APPLICATION BEHAVIOUR
 "                      - KEYBORD MAPPINGS
 
 "                      - Syntax Highlight, Colors, Fonts...
@@ -23,7 +24,6 @@
 "                      - General Abbrevs
 "                      - Parenthesis/bracket expanding
 "                      - Editing mappings
-"                      - Searching
 "                      - Cope
 "                      - Omni complete functions
 "                      - Spell checking
@@ -39,24 +39,45 @@
 "
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" C:\Users\alfonso.cuffaro\vim_local - Copy (2)\vimrc
 
 
 
+let g:LINUX   = 'LINUX'
+let g:MAC     = 'MAC'
+let g:WINDOWS = 'WINDOWS'
+
+let g:MY_SYSTEM = LINUX
+
+
+
+fun! MySys()
+	return g:MY_SYSTEM 
+endfun
+
+
+
+
+if MySys() == LINUX
+	set runtimepath=/home/alfonso/vim_local,$VIMRUNTIME
+elseif MySys() == WINDOWS
+	set runtimepath=/Users/alfonso.cuffaro/vim_local,$VIMRUNTIME
+elseif MySys() == MAC
+	" do mac stuff here...
+else
+	" unknown system, do nothing
+	finish
+endif
 
 
 "===================================================================================================
-" NOTE: on WINDOWS systems
-" 1. create a file named '_vimrc' under the user home directory
-"    (example: on my Windows 7 system is under C:\Users\alfonso.cuffaro)
-"    the created file will be C:\Users\alfonso.cuffaro\_vimrc
-" 2. copy the following rows in the above mentioned file
-"
-"         fun! MySys()
-"            return "windows"
-"         endfun
-"
-"         set runtimepath=/Users/alfonso.cuffaro/vim_local,$VIMRUNTIME
-"         source /Users/alfonso.cuffaro/vim_local/vimrc
+" NOTE:
+"	- on WIN 7:
+"		- copy file .vimrc.windows.win7 to user's home folder (/users/alfonso)
+"		- then rename to _vimrc
+"	- on LINUX:
+"		- copy file .vimrc.linux to user's home folder (/home/alfonso)
+"		- then rename to .vimrc
 "
 "===================================================================================================
 
@@ -73,8 +94,22 @@ set nocompatible
 " manage all others plugins using pathogen plugin (from Tim Pope)
 " (http://www.vim.org/scripts/script.php?script_id=2332)
 filetype off                       " force reloading *after* pathogen loaded
+set runtimepath+=$HOME/
+
 call pathogen#infect()
 call pathogen#helptags()
+"call vundle#rc()
+
+
+
+" required: let Vundle manage Vundle
+"Bundle "gmarik/vundle"
+"Bundle "lusty"
+"Bundle 'Headlights
+
+
+
+
 filetype on
 
 
@@ -125,22 +160,20 @@ endtry
 "===================================================================================================
 " USER INTERFACE: Syntax Highlight, Colors, Fonts
 "===================================================================================================
-
 " actual font depends on system
-if MySys() == "mac"
+if MySys() == MAC
   set gfn=Menlo:h14
-  set shell=/bin/bash
-elseif MySys() == "windows"
+  "set shell=/bin/bash
+elseif MySys() == WINDOWS
   set gfn=Consolas:h10:cDEFAULT
   "set shell=/bin/bash
-elseif MySys() == "linux"
+elseif MySys() == LINUX
   set gfn=Monospace\ 10
   set shell=/bin/bash
 endif
 
 
 syntax enable       " enable syntax highlighting (keep your current color settings)
-"syntax on          " enable syntax highlighting (Vim overrules your settings with the defaults)
 set cursorline      " make current cursor line visible
 
 
@@ -162,18 +195,52 @@ endif
 
 
 
+set showmatch       " show matching brackets when text indicator is over them
+set matchtime=4     " matching parenthesis: how many tenths of a second to blink                                                          
+
+
+
+
 
 
 
 
 "===================================================================================================
-" USER INTERFACE: application window
+" USER INTERFACE: application window & interactions
 "===================================================================================================
 
 " include toolbar? no, remove it
 if has("gui_running")
 	set guioptions-=T
 endif
+
+"let g:LINUX   = 'LINUX'
+"let g:MAC     = 'MAC'
+"let g:WINDOWS = 'WINDOWS'
+"
+"let g:MY_SYSTEM = LINUX
+"
+"
+"
+"fun! MySys()
+"	return g:MY_SYSTEM 
+"endfun
+"
+"
+"
+"
+"if MySys() == LINUX
+"	set runtimepath=/home/alfonso/vim_local,$VIMRUNTIME
+"	source /home/alfonso/vim_local/vimrc
+"elseif MySys() == WINDOWS
+"	set runtimepath=/Users/alfonso.cuffaro/vim_local,$VIMRUNTIME
+"	source /Users/alfonso.cuffaro/vim_local/vimrc
+"elseif MySys() == MAC
+"	" do mac stuff here...
+"else
+"	" do nothing
+"	finish
+"endif
 
 " set windows height and width, BUT only entering the application for the first time
 " if user has yet redimensioned the window to fit his needs, don't reset it (do nothing)
@@ -216,6 +283,12 @@ set foldlevel=99
 "endif
 
 
+"set linebreak
+"set textwidth=500
+"set wrap        " wrap lines
+set so=7           " minimum nr. of lines above and below cursor (when moving vertical)
+
+set mouse=a
 
 "===================================================================================================
 " USER INTERFACE: tabbing
@@ -232,7 +305,9 @@ set fileformats=unix,dos,mac        " default file types
 set nobackup           " turn backup off
 set noautoread         " ask me to reload a file if it has been modified from an external application
 set writebackup        " make a backup before overwriting a file (backup is removed on successful writing)
-set noswapfile
+"set noswapfile
+"set directory=$TEMP    " List of directory names for the swap file, separated with commas
+ 
 set browsedir=buffer   " file browser uses buffer dir to start
 
 " persistent undo
@@ -294,13 +369,50 @@ set hlsearch   " highlight search things
 
 
 
+
+
+
+
+
+
+
+"===================================================================================================
+" APPLICATION BEHAVIOUR
+"===================================================================================================
+
+" auto change the directory to the current file I'm working on
+autocmd BufEnter * lcd %:p:h
+
+
+
 "===================================================================================================
 " KEYBORD MAPPINGS
 "===================================================================================================
 map <leader>e :e! ~/vim_local/vimrc<cr>               " fast editing of the vim conf file
 autocmd! bufwritepost vimrc source ~/vim_local/vimrc  " when vim conf file is edited, reload it
 
+"map <leader>w :w!<cr>   " fast saving
+map <leader>w :w<cr>     " fast saving
+
+map <silent> <space> :nohlsearch<cr>
 
 
 
+" --- command mode -----------------------------
+
+
+
+
+
+
+
+
+
+"===================================================================================================
+" PLUGIN: Command-T
+"===================================================================================================
+"let g:CommandTMaxHeight = 15
+"set wildignore+=*.o,*.obj,.git,*.pyc
+"noremap <leader>j :CommandT<cr>
+"noremap <leader>y :CommandTFlush<cr>
 

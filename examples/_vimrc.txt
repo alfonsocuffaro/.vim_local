@@ -1,0 +1,859 @@
+" http://dl.dropbox.com/u/2504147/gabriev82.com/_vimrc
+set nocompatible
+
+" set the 'cpoptions' to its Vim default
+if 1	" only do this when compiled with expression evaluation
+  let s:save_cpo = &cpoptions
+endif
+set cpo&vim
+
+" set 'selection', 'selectmode', 'mousemodel' and 'keymodel' for MS-Windows
+behave mswin
+
+
+" backspace in Visual mode deletes selection
+vnoremap <BS> d
+
+" CTRL-X and SHIFT-Del are Cut
+vnoremap <C-X> "+x
+vnoremap <S-Del> "+x
+
+" CTRL-C and CTRL-Insert are Copy
+vnoremap <C-C> "+ygv
+vnoremap <C-Insert> "+ygv
+
+" CTRL-V and SHIFT-Insert are Paste
+map <C-V>		"+gP
+map <S-Insert>		"+gP
+
+cmap <C-V>		<C-R>+
+cmap <S-Insert>		<C-R>+
+
+" Pasting blockwise and linewise selections is not possible in Insert and
+" Visual mode without the +virtualedit feature.  They are pasted as if they
+" were characterwise instead.
+" Uses the paste.vim autoload script.
+
+exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
+exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
+
+imap <S-Insert>		<C-V>
+vmap <S-Insert>		<C-V>
+
+" Use CTRL-Q to do what CTRL-V used to do (Vertical selection)
+noremap <C-Q>		<C-V>
+
+" Use CTRL-S for saving, also in Insert mode
+noremap <C-S>		:update<CR>
+vnoremap <C-S>		<C-C>:update<CR>
+inoremap <C-S>		<C-O>:update<CR>
+
+" For CTRL-V to work autoselect must be off.
+" On Unix we have two selections, autoselect can be used.
+if !has("unix")
+  set guioptions-=a
+endif
+
+" CTRL-Z is Undo; not in cmdline though
+noremap <C-Z> u
+inoremap <C-Z> <C-O>u
+
+" CTRL-Y is Redo (although not repeat); not in cmdline though
+" noremap <C-Y> <C-R>
+" inoremap <C-Y> <C-O><C-R>
+
+
+" CTRL-A is Select all
+" noremap <C-A> gggH<C-O>G
+inoremap <C-A> <C-O>gg<C-O>gH<C-O>G
+cnoremap <C-A> <C-C>gggH<C-O>G
+onoremap <C-A> <C-C>gggH<C-O>G
+snoremap <C-A> <C-C>gggH<C-O>G
+xnoremap <C-A> <C-C>ggVG
+
+" CTRL-Tab is Next window
+noremap <C-Tab> <C-W>w
+inoremap <C-Tab> <C-O><C-W>w
+cnoremap <C-Tab> <C-C><C-W>w
+onoremap <C-Tab> <C-C><C-W>w
+
+" CTRL-Tab is Previous window
+noremap <S-C-Tab> <C-W>p
+inoremap <S-C-Tab> <C-O><C-W>p
+cnoremap <S-C-Tab> <C-C><C-W>p
+onoremap <S-C-Tab> <C-C><C-W>p
+
+
+
+
+" CTRL-F4 is Close window
+noremap <C-F4> <C-W>c
+inoremap <C-F4> <C-O><C-W>c
+cnoremap <C-F4> <C-C><C-W>c
+onoremap <C-F4> <C-C><C-W>c
+
+" restore 'cpoptions'
+set cpo&
+if 1
+  let &cpoptions = s:save_cpo
+  unlet s:save_cpo
+endif
+
+
+
+
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+" inoremap <C-U> <C-G>u<C-U>
+
+" In many terminal emulators the mouse works just fine, thus enable it.
+if has('mouse')
+  set mouse=a
+endif
+
+
+" Normal PgUp/PgDn link Notepad++
+nnoremap <silent> <PageUp> <C-U><C-U>
+vnoremap <silent> <PageUp> <C-U><C-U>
+inoremap <silent> <PageUp> <C-\><C-O><C-U><C-\><C-O><C-U>
+
+nnoremap <silent> <PageDown> <C-D><C-D>
+vnoremap <silent> <PageDown> <C-D><C-D>
+inoremap <silent> <PageDown> <C-\><C-O><C-D><C-\><C-O><C-D>
+
+
+
+set diffexpr=MyDiff()
+function! MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let eq = ''
+  if $VIMRUNTIME =~ ' '
+	if &sh =~ '\<cmd'
+	  let cmd = '""' . $VIMRUNTIME . '\diff"'
+	  let eq = '"'
+	else
+	  let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+	endif
+  else
+	let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+endfunction
+
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+	command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+				\ | wincmd p | diffthis
+endif
+
+
+
+" set English language
+language messages en
+set langmenu=none
+
+
+" Use english for spellchecking, but don't spellcheck by default
+if version >= 700
+   set spl=en spell
+   set nospell
+endif
+
+
+" No startup messages
+set shm+=atmI
+
+" Universal clipboard
+" set clipboard=unnamed
+" share windows clipboard
+" set clipboard+=unnamed 
+
+" set better default font and window size
+if has("gui_running")
+	if has("gui_gtk2")
+		set guifont=Inconsolata\ 12
+	elseif has("gui_win32")
+		set guifont=Consolas:h11:cDEFAULT
+	endif
+	set guioptions-=T	" Get rid of toolbar 
+	" set guioptions-=m   " Get rid of menu
+
+	" For Win32 GUI, remove 't' flag from 'guioptions': no tearoff menu entries
+	let &guioptions = substitute(&guioptions, "t", "", "g")
+
+	" set GUI File Open use current directory
+	set browsedir=buffer
+
+	" set default window size
+	set lines=42 columns=128
+endif
+
+" always switch to the current file directory
+set autochdir
+
+
+" none of these are word dividers
+" set iskeyword+=_,$,@,%,#
+
+" Set support for utf-8 without BOM
+if has("multi_byte")
+  if &termencoding == ""
+	let &termencoding = &encoding
+  endif
+  set encoding=utf-8
+  setglobal fileencoding=utf-8 bomb
+  set fileencodings=ucs-bom,utf-8,default,latin1
+endif
+
+
+function! ToggleWrap()
+	set invwrap wrap?
+endfunc
+
+
+"F12 toggles wrap (Thanks to Alexandre Moreira)
+nnoremap <silent> <F12>		 :call ToggleWrap()<CR>
+vnoremap <silent> <F12> <C-C>:call ToggleWrap()<CR>
+inoremap <silent> <F12> <C-O>:call ToggleWrap()<CR>
+
+
+
+function! ToggleHorizontalScrollbar()
+	if &guioptions =~# "b"
+		set guioptions-=b
+	else
+		set guioptions+=b
+	endif
+endfunc
+
+function! ToggleHorizontalScrollbar_setKeys()
+	"Shift+F12 toggles the horizontal scrollbar
+	nnoremap <silent> <S-F12>	   :call ToggleHorizontalScrollbar()<CR>
+	vnoremap <silent> <S-F12> <C-C>:call ToggleHorizontalScrollbar()<CR>
+	inoremap <silent> <S-F12> <C-O>:call ToggleHorizontalScrollbar()<CR>
+endfunc
+
+au GUIEnter * call ToggleHorizontalScrollbar_setKeys()
+
+
+
+" F11 show/hide line numbers
+nnoremap <silent> <F11>		:set invnumber number?<CR>
+
+
+
+function! Switch_HTML_PHP()
+	if &filetype == "html"
+		set filetype=php
+	else
+		set filetype=html
+	endif
+endfunc
+
+"F8 switch HTML <-> PHP filetype
+nnoremap <silent> <F8>		:call Switch_HTML_PHP()<CR>
+
+
+
+
+" Buffers - explore/next/previous 
+nnoremap <silent> <F5> :buffers<CR>:buffer<Space>
+nnoremap <silent> <S-F5> :bd<CR>
+nnoremap <silent> <C-S-F5> :bd!<CR>
+nnoremap <silent> <F6> :bp<CR>
+nnoremap <silent> <F7> :bn<CR>
+
+" I work with HTML often, so I have mapped 'fold tag' function
+nnoremap <Leader>q Vatzf
+
+" Remove the Windows ^M - when the encodings gets messed up
+noremap <Leader>mm mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+
+" Edit .vimrc configuration file
+noremap <Leader>e :e $MYVIMRC<CR>
+" noremap <Leader>e :tabedit $MYVIMRC<CR>
+
+" Edit my colorscheme on a right split window
+noremap <Leader>th :bel vsp $VIM/vimfiles/colors/level28.vim<CR>
+
+" Make cursor move as expected with wrapped lines (in insert mode only with Alt key)
+nnoremap <silent> <Up> gk
+nnoremap <silent> <Down> gj
+inoremap <M-Down> <C-o>gj
+inoremap <M-Up> <C-o>gk
+
+
+" better Shift + Ctrl + Left-Right selection range
+vnoremap <S-C-Left> b
+vnoremap <S-C-Right> e
+nnoremap <C-Left> b
+nnoremap <C-Right> e
+nnoremap <S-C-Left> vb
+nnoremap <S-C-Right> ve
+
+
+" Make enter useful in normal & visual mode (match tags and brackets)
+nmap <C-CR> %
+vmap <C-CR> %
+
+
+" Tab shortcut configuration
+map <leader>tn :tabnew<CR>
+map <leader>te :tabedit
+map <leader>tc :tabclose<CR>
+map <leader>tm :tabmove
+
+" Run firefox
+cmap ff :!start "c:\Programmi\Mozilla Firefox\firefox.exe" "%"<CR>
+
+
+" Remap Home key with a better start line
+nnoremap <silent> <Home> ^
+vnoremap <silent> <Home> <C-C>^
+inoremap <silent> <Home> <C-O>^
+
+" Fast find selected text
+map , y/<C-R>"/<cr> 
+
+" disable both the visual error flash and the error beep
+autocmd VimEnter * set vb t_vb=
+set noerrorbells
+
+
+" Sets how many lines of history VIM has to remember
+set history=1000
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" Show (partial) command in status line.
+set showcmd
+
+" Command bar line height
+set cmdheight=1
+
+" Display tabbar by default
+" set showtabline=1 
+
+" don't move the cursor to the start of the line when scrolling
+set nostartofline 
+
+
+" If in Insert, Replace or Visual mode put a message on the last line.
+set showmode
+
+" When off a buffer is unloaded when it is abandoned.  When on a
+" buffer becomes hidden when it is abandoned.  
+set hidden
+
+" Highlight the screen line of the cursor with CursorLine
+set cursorline
+
+" Highlight the current column
+" set cursorcolumn 
+
+" show line and column of cursor position
+set ruler
+
+" Split windows BELOW current windows
+" set splitbelow
+
+" Always report changes
+set report=0
+
+
+set foldenable
+
+
+" Influences the working of <BS>, <Del>, CTRL-W and CTRL-U in Insert mode.
+set backspace=indent,eol,start
+
+
+" Cool tab completion stuff
+set wildmenu
+set wildmode=list:longest,full
+set wildignore=*.dll,*.o,*.obj,*.bak,*.pyc,*.zip,*.fla
+" set wildignore=*.dll,*.o,*.obj,*.bak,*.pyc,*.zip,*.swf,*.fla,*.jpg,*.gif,*.png
+
+
+set autoindent smartindent	  " auto/smart indent
+set smarttab				  " tab and backspace are smart
+
+" HTML strange indenting....
+" set indentkeys-=*<Return>
+
+
+"  searching
+set incsearch					" incremental search
+set ignorecase					" search ignoring case
+set hlsearch					" highlight the search
+set showmatch					" show matching bracket
+set diffopt=filler,iwhite		" ignore all whitespace and sync
+
+" If you search for an all-lowercase string your search will be case-insensitive, but if one or more characters is uppercase the search will be case-sensitive.
+set smartcase
+
+
+"Status line gnarliness
+set laststatus=2
+" set statusline=%F%m%r%h%w\ (%{&ff}){%Y}\ [%l,%v][%p%%]
+" set statusline=%F%m%r%h%w\ (%{&ff}){%Y}\ [%{(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\")}%k]\ [%l,%v][%p%%]
+" set statusline=%F%m%r%h%w\ {%{&ff}\|%{(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\")}%k\|%Y}\ [%l,%v][%p%%]
+" set statusline=%<%F%m%r%h%w\ {%{&ff}\|%{(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\")}%k\|%Y}\ %=%-14([%l,%v][%p%%]\ %)
+" set statusline=%f%m%r%h%w\ %({%{&ff}\|%{(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\")}%k\|%Y}%)\ %=%([%l,%v][%p%%]\ %)
+set statusline=\ %f%m%r%h%w\ %=%({%{&ff}\|%{(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\")}%k\|%Y}%)\ %([%l,%v][%p%%]\ %)
+
+
+" Display invisible characters.
+" set listchars=eol:¶,tab:>-,trail:~,extends:>,precedes:<
+" Use the same symbols as TextMate for tabstops and EOLs
+set listchars=eol:¬,tab:>-,trail:~,extends:>,precedes:<
+set nolist
+
+" add my personal dictionary file
+set dictionary+=$VIM/vimfiles/dict.txt
+
+" add to autocomplete the dictionary
+set complete+=k
+
+" for XSL / CSS - completition works great
+set iskeyword+=-,: 
+
+
+
+" Toggle highlight search
+nnoremap <S-F3> :set hlsearch!<CR>
+
+" Clear search pattern
+nnoremap <F3> :let @/ = ""<CR>
+
+" F9 show/hide whitespaces
+nnoremap <silent> <F9>		:set invlist list?<CR>
+
+" Retab and Strip trailing whitespace 
+function! RetabAndStripTrailingWhitespace()
+	:retab!
+	:%s/\s\+$//e
+endfunction
+nnoremap <Leader>cu			:call RetabAndStripTrailingWhitespace()<CR> 
+
+" Turn backup off, since most stuff is in SVN, git anyway...
+set nobackup
+set nowb
+" set noswapfile
+
+" swp files are saved to %Temp% folder
+set dir=$temp
+set swapfile
+
+
+" Now you can select both with the mouse and shifted arrow keys and press '>' to indent
+set selectmode=
+
+" set inclusive, default is exclusive... but have problem with sorround.vim plugin
+set selection=inclusive
+
+
+" Pressing Tab or Shift-Tab will let you indent/unident selected lines
+vnoremap <S-Tab> <gv
+vnoremap <Tab>	 >gv
+
+" Tabs are four columns wide. Each indentation level is one tab. (Popular with Windows developers using Visual Studio.) 
+set tabstop=4
+set softtabstop=4 
+set shiftwidth=4 
+set noexpandtab
+
+" Set terminal title
+set title
+
+" Scroll lines margin from cursor
+set scrolloff=3
+
+" No extra space when join lines
+set joinspaces
+
+
+" File format detection
+set ff=dos
+set ffs=dos,unix,mac
+
+
+" Don't Redraw while executing macros
+set lazyredraw 
+
+
+" don't insert any extra pixel lines betweens rows
+set linespace=2
+
+" prevent Vim from automatically inserting line breaks in newly entered text
+set textwidth=0
+set wrapmargin=0
+
+" I like onemore & all virtualedit
+" set virtualedit=onemore
+set virtualedit=all
+
+
+" space / shift-space scroll in normal mode
+" noremap <S-Space> <C-b>
+" noremap <Space> <C-f>
+
+
+
+" Theme Rotating
+let themeindex=0
+function! RotateColorTheme()
+   let y = -1
+   while y == -1
+	  let colorstring = "#default#notepadpp#wombat#pyte#molokai#inkpot#elflord#evening#koehler#murphy#pablo#desert#torte#zellner#"
+	  let x = match( colorstring, "#", g:themeindex )
+	  let y = match( colorstring, "#", x + 1 )
+	  let g:themeindex = x + 1
+	  if y == -1
+		 let g:themeindex = 0
+	  else
+		 let themestring = strpart(colorstring, x + 1, y - x - 1)
+		 return ":colorscheme ".themestring
+	  endif
+   endwhile
+endfunction
+
+
+" Rotate Color Scheme <S-F8>
+nnoremap <silent> <S-F8> :execute RotateColorTheme()<CR>
+
+
+" Font Switching Binds 
+map <Leader>1 :set guifont=Consolas:h8:cDEFAULT<CR>
+map <Leader>2 :set guifont=Consolas:h11:cDEFAULT<CR>
+map <Leader>3 :set guifont=Consolas:h13:cDEFAULT<CR>
+map <Leader>4 :set guifont=Consolas:h16:cDEFAULT<CR>
+
+
+
+" Show syntax highlighting groups for word under cursor
+function! <SID>SynStack()
+  if !exists("*synstack")
+	return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+nmap <Leader><F1> :call <SID>SynStack()<CR>
+
+
+" Autocomplete with path & filename (super useful for html)
+function! CompleteFilenames(findstart, base)
+	if a:findstart
+		" locate the start of the word
+		let line = getline('.')
+		let start = col('.') - 1
+		while start > 0 && line[start - 1] =~ '\a'
+			let start -= 1
+		endwhile
+		return start
+	else
+		" let separator = !exists("+shellslash") || &shellslash ? '/' : '\'
+		let separator = '/'
+		let original = expand("%")
+		" let partialname = expand("<cfile>")
+		let dir   = fnamemodify(original,':h')
+		if dir == '.'
+			let dir = ''
+		elseif dir != ''
+			let dir .= '/'
+		endif
+
+		let line = getline('.')
+		let start = (col('.') - 1)
+		let subpath = ''
+
+		let [target_line_pos, target_col_pos]  = searchpos('"', 'bnW', line("w0"))
+
+		let getmatchpath = matchstr(line, '\("[^"]*"\)', target_col_pos - 1 )
+		let subpath = substitute(getmatchpath, '"', '', 'g')
+
+		let dir = dir . subpath
+		
+		let files = split(glob(dir.".*"),"\n")
+		let files += split(glob(dir."*"),"\n")
+		
+
+		call filter(files,'v:val !=# "." && v:val !=# ".."')
+		
+		" for listdir in files
+		" 	if isdirectory(listdir)
+		" 		let files += split(glob(dir.listdir."/*"),"\n")
+		" 	endif
+		" endfor
+		
+		call filter(files,'v:val[-4:-1] !=# ".swp" && v:val[-1:-1] !=# "~"')
+		call filter(files,'v:val[-3:-1] !=# ".db"')
+		call sort(files)
+
+
+		let index = 0
+		while index < len(files)
+			if isdirectory(files[index])
+				let files[index] = files[index] . separator
+			endif
+			let files[index] = substitute(files[index], '\', '/', 'g')
+			let index = index + 1
+		endwhile
+
+		let index1 = 0
+		while index1 < len(files)
+			let files[index1] = strpart(files[index1], strlen(dir)) 
+			let index1 = index1 + 1
+		endwhile
+
+		
+		call filter(files,'v:val !=# "./" && v:val !=# "../"')
+
+		" let line = getline('.')
+		" let start = col('.') - 1
+		"let lastchar = line[start - 1]
+		"
+		"if lastchar == '/'
+		"	let files += [line[start - 1]]
+		"endif
+
+		" let column_num = virtcol('.')
+		"let target_pattern = '\%' . column_num . 'v.'
+		"let target_line_num = search(target_pattern . '*\S', 'bnW')
+		
+
+		" let aaa = matchstr(line, '\("[^"]*"\)', column_num - len(a:base) - 1 )
+		" let aaa = matchstr(line, '\("[^"]*"\)', 0 )
+		" let files += [ substitute(aaa, '"', '', 'g') ]
+		"let files[index] += [ substitute(aaa, '"', 'iiiiii', 'g') ]
+		" let files += [ matchstr(line, '/\("[^"]*"\)', start - 1 ) ]
+		
+		"let files += [ a:base ]
+		"if target_line_num
+		"	let files += [matchstr(getline(target_line_num), target_pattern)]
+		"endif
+
+		
+		" find months matching with a:base
+		let res = []
+		for m in files
+			if m =~ '^' . a:base
+				call add(res, m)
+			endif
+		endfor
+		return res
+	endif
+endfunction
+
+" Invoke with <C-X><C-U>
+set completefunc=CompleteFilenames
+
+
+
+
+" Auto change the directory to the current file I'm working on
+autocmd BufEnter * lcd %:p:h
+
+
+" ============================== 
+" => MRU plugin
+" ============================== 
+let MRU_Max_Entries = 400
+map <leader>f :MRU<CR>
+
+
+" ============================== 
+" => NERDtree plugin
+" ============================== 
+nnoremap <F2> :NERDTreeToggle<CR>
+
+
+" ============================== 
+" => xmledit plugin
+" ============================== 
+" let xml_tag_completion_map = "<C-SPACE>"
+" let xml_use_xhtml = 1
+
+
+" ============================== 
+" => unimpaired plugin
+" ============================== 
+" Bubble single lines
+nmap <C-Up> [e
+nmap <C-Down> ]e
+" Bubble multiple lines
+vmap <C-Up> [egv
+vmap <C-Down> ]egv
+
+
+
+" ============================== 
+" => delimitMate plugin
+" ============================== 
+" let g:delimitMate_expand_space = 1
+" let g:delimitMate_expand_cr = 1
+" au FileType * let b:delimitMate_autoclose = 0
+let loaded_delimitMate = 0
+let g:delimitMate_autoclose = 1 " Automatically close tags and quotes with delimitMate plugin
+let g:delimitMate_matchpairs = "(:),[:],{:}"
+let g:delimitMate_smart_matchpairs = '\%(\w\|!\|£\|\$\|_\|"\s*\S)'
+nnoremap <F4>	:DelimitMateSwitch<CR>
+
+
+
+" ============================== 
+" => FuzzyFinder plugin
+" ============================== 
+nnoremap <Leader><Space> :FufFile<CR>
+
+
+" ============================== 
+" => ZenCoding plugin
+" ============================== 
+let g:user_zen_expandabbr_key = '<S-C-Space>' 
+let g:user_zen_imagesize_key = '<S-C-i>'
+
+" imap <S-C-Space> <c-y>, 
+" inoremap <C-Space> <c-y>, 
+
+
+" ============================== 
+" => YankRing plugin
+" ============================== 
+let g:yankring_zap_keys = 'f F t T / ?'		" remove @ char.. make confusion
+nnoremap <S-F4>		:YRShow<CR>
+
+
+" ============================== 
+" => TComment plugin
+" ============================== 
+" let g:tcommentBlankLines = 0
+" let g:tcommentBlockC = {
+" 			\ 'commentstring': '/*%s */',
+" 			\ 'middle': '',
+" 			\ 'rxbeg': '\*\+',
+" 			\ 'rxend': '\*\+',
+" 			\ 'rxmid': '\*\+',
+" 			\ }
+
+
+
+syntax on
+
+filetype on					  " Enable filetype detection
+filetype indent on			  " Enable filetype-specific indenting
+filetype plugin on			  " Enable filetype-specific plugins
+
+
+
+" Only do this part when compiled with support for autocommands
+if has("autocmd")
+	" Enable file type detection
+	" filetype on
+	
+	" Enable file type detection.
+	" Use the default filetype settings, so that mail gets 'tw' set to 72,
+	" 'cindent' is on in C files, etc.
+	" Also load indent files, to automatically do language-dependent indenting.
+	filetype plugin indent on
+
+	" Put these in an autocmd group, so that we can delete them easily.
+	augroup vimrcEx
+		au!
+
+		" For all text files set 'textwidth' to 78 characters.
+		autocmd FileType text setlocal textwidth=78
+
+		" When editing a file, always jump to the last known cursor position.
+		" Don't do it when the position is invalid or when inside an event handler
+		" (happens when dropping a file on gvim).
+		" Also don't do it when the mark is in the first line, that is the default
+		" position when opening a file.
+		autocmd BufReadPost *
+					\ if line("'\"") > 1 && line("'\"") <= line("$") |
+					\   exe "normal! g`\"" |
+					\ endif
+
+	augroup END
+
+
+
+
+	" Syntax of these languages is fussy over tabs Vs spaces
+	" autocmd FileType make setlocal ts=8 sts=8 sw=8 noexpandtab
+	" autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+	" Customisations based on house-style (arbitrary)
+	" autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab
+	" autocmd FileType css setlocal ts=2 sts=2 sw=2 expandtab
+	" autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
+
+	" Show line number by default for followed filetype
+	autocmd FileType html			setlocal number
+	autocmd FileType xhtml			setlocal number
+	autocmd FileType css			setlocal number
+	autocmd FileType javascript		setlocal number
+	autocmd FileType php			setlocal number
+	
+
+	" Restore cursor position
+	autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+	
+
+	" Filetypes (au = autocmd)
+	autocmd FileType help setlocal nonumber				" no line numbers when viewing help
+	autocmd FileType help nnoremap <buffer><CR> <c-]>	" Enter selects subject
+	autocmd FileType help nnoremap <buffer><BS> <c-T>	" Backspace to go back
+
+
+	" Treat .rss files as XML
+	autocmd BufNewFile,BufRead *.rss setfiletype xml
+
+	" Treat .as files as Actionscript  
+	autocmd BufNewFile,BufRead *.as setfiletype actionscript
+	autocmd BufNewFile,BufRead *.as set filetype=actionscript
+
+	" Complete from filetype syntax file 
+	autocmd FileType * exec('set dict+='.$VIMRUNTIME.'/syntax/'.getbufvar("%","current_syntax").'.vim')
+	
+
+	" That tells VIM to disable syntax (:set syntax=) for any file whose size (while opening, :h BufReadPost) is greater than a half meg (if getfsize(bufname("%")) > 512*1024).
+	autocmd BufReadPost * if getfsize(bufname("%")) > 512*1024 |
+	\ set syntax= |
+	\ endif	
+endif
+
+
+" Add abbreviation in insert mode - triggered by the spacebar
+iabbrev gabmail gabriev82@gmail.com
+iabbrev xdate <C-R>=strftime("%d/%m/%Y %H:%M:%S")<CR>
+
+
+
+" Set default colorscheme
+colorscheme level28
+
+" Reset last search query
+let @/ = ""
+
+" Disable matchparen plugin
+" let g:loaded_matchparen = 0
+
+
+

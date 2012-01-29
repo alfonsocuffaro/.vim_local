@@ -1,0 +1,3 @@
+set runtimepath=/Users/alfonso/vim_local,$VIMRUNTIME
+source /Users/alfonso/vim_local/vimrc
+
